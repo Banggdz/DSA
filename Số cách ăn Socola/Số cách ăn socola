@@ -34,7 +34,49 @@ int main() {
 
     return 0;
 }
+----------------------------------------------------------------------------------------------------------
+#include <iostream>
+#include <vector>
 
+using namespace std;
+
+long long countWays(int n) {
+    // T?o b?ng DP
+    vector<vector<long long>> dp(n + 1, vector<long long>(2 * n + 1, 0));
+
+    // Tru?ng h?p co s?
+    dp[0][0] = 1;
+
+    // Duy?t t?t c? tr?ng thái
+    for (int fullBars = 0; fullBars <= n; fullBars++) {
+        for (int halfBars = 0; halfBars <= 2 * n; halfBars++) {
+            // N?u có thanh nguyên, b? thanh nguyên
+            if (fullBars > 0) {
+                dp[fullBars][halfBars] += dp[fullBars - 1][halfBars + 1];
+            }
+            // N?u có thanh n?a, an thanh n?a
+            if (halfBars > 0) {
+                dp[fullBars][halfBars] += dp[fullBars][halfBars - 1];
+            }
+        }
+    }
+
+    // Tr? v? k?t qu? cho tru?ng h?p ban d?u (n thanh nguyên, 0 thanh n?a)
+    return dp[n][0];
+}
+
+int main() {
+    int t; // S? lu?ng test case
+    cin >> t;
+
+    while (t--) {
+        int n; // S? thanh nguyên
+        cin >> n;
+        cout << countWays(n) << endl;
+    }
+
+    return 0;
+}
 ----------------------------------------------------------------------------------------------------------
 #include <iostream>
 #include <vector>
