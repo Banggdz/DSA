@@ -1,0 +1,76 @@
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+
+using namespace std;
+
+unordered_map<int, long long> memo;
+
+long long countWays(int fullBars, int halfBars) {
+    if (fullBars == 0 && halfBars == 0) return 1; // Base case: no more chocolate left
+    if (memo[fullBars * 1000 + halfBars] != 0) return memo[fullBars * 1000 + halfBars]; // Memoization
+
+    long long ways = 0;
+    // If Nam chooses to break a full bar into halves
+    if (fullBars > 0) ways += countWays(fullBars - 1, halfBars + 1);
+
+    // If Nam chooses to eat a half bar
+    if (halfBars > 0) ways += countWays(fullBars, halfBars - 1);
+
+    memo[fullBars * 1000 + halfBars] = ways;
+    return ways;
+}
+
+int main() {
+    int t; // Number of test cases
+    cin >> t;
+
+    while (t--) {
+        int n; // Number of full bars
+        cin >> n;
+        memo.clear(); // Clear memoization map for each test case
+        cout << countWays(n, 0) << endl;
+    }
+
+    return 0;
+}
+
+----------------------------------------------------------------------------------------------------------
+#include <iostream>
+#include <vector>
+using namespace std;
+
+// Hàm tính s? Catalan
+vector<long long> calculateCatalan(int maxN) {
+    vector<long long> catalan(maxN + 1, 0);
+    catalan[0] = 1; // Tru?ng h?p co s?
+
+    for (int n = 1; n <= maxN; n++) {
+        for (int i = 0; i < n; i++) {
+            catalan[n] += catalan[i] * catalan[n - i - 1];
+        }
+    }
+    return catalan;
+}
+
+int main() {
+    int T; // S? b? test
+    cin >> T;
+
+    vector<int> tests(T);
+    int maxN = 0;
+    for (int i = 0; i < T; i++) {
+        cin >> tests[i];
+        maxN = max(maxN, tests[i]); // Tìm giá tr? N l?n nh?t
+    }
+
+    // Tính tru?c t?t c? s? Catalan c?n dùng
+    vector<long long> catalan = calculateCatalan(maxN);
+
+    // Xu?t k?t qu?
+    for (int i = 0; i < T; i++) {
+        cout << catalan[tests[i]] << endl;
+    }
+
+    return 0;
+}
